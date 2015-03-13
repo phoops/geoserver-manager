@@ -25,15 +25,6 @@
 
 package it.geosolutions.geoserver.rest;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -51,6 +42,15 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Low level HTTP utilities.
@@ -90,6 +90,7 @@ public class HTTPUtils {
             setAuth(client, url, username, pw);
             httpMethod = new GetMethod(url);
             connectionManager.getParams().setConnectionTimeout(5000);
+            connectionManager.getParams().setSoTimeout(30000);
             int status = client.executeMethod(httpMethod);
             if (status == HttpStatus.SC_OK) {
                 InputStream is = httpMethod.getResponseBodyAsStream();
@@ -289,6 +290,7 @@ public class HTTPUtils {
         try {
             setAuth(client, url, username, pw);
             connectionManager.getParams().setConnectionTimeout(5000);
+            connectionManager.getParams().setSoTimeout(30000);
             if (requestEntity != null)
                 httpMethod.setRequestEntity(requestEntity);
             int status = client.executeMethod(httpMethod);
@@ -330,6 +332,7 @@ public class HTTPUtils {
             setAuth(client, url, user, pw);
             httpMethod = new DeleteMethod(url);
             connectionManager.getParams().setConnectionTimeout(5000);
+            connectionManager.getParams().setSoTimeout(30000);
             int status = client.executeMethod(httpMethod);
             String response = "";
             if (status == HttpStatus.SC_OK) {
@@ -378,6 +381,7 @@ public class HTTPUtils {
             setAuth(client, url, username, pw);
             httpMethod = new GetMethod(url);
             connectionManager.getParams().setConnectionTimeout(2000);
+            connectionManager.getParams().setSoTimeout(30000);
             int status = client.executeMethod(httpMethod);
             if (status != HttpStatus.SC_OK) {
                 LOGGER.warn("PING failed at '" + url + "': (" + status + ") " + httpMethod.getStatusText());
@@ -415,6 +419,7 @@ public class HTTPUtils {
             setAuth(client, url, username, pw);
             httpMethod = new GetMethod(url);
             connectionManager.getParams().setConnectionTimeout(2000);
+            connectionManager.getParams().setSoTimeout(30000);
             int status = client.executeMethod(httpMethod);
             switch (status) {
             case HttpStatus.SC_OK:
